@@ -1,0 +1,16 @@
+{
+  "name": "udaysagar2177-install_collectd",
+  "version": "0.1.0",
+  "author": "udaysagar2177",
+  "summary": "A puppet module that just installs collectd from SignalFx repositories",
+  "license": "Apache 2.0",
+  "source": "https://github.com/signalfx/puppet_install_collectd",
+  "project_page": "https://github.com/signalfx/puppet_install_collectd",
+  "issues_url": "https://github.com/signalfx/puppet_install_collectd/issues",
+  "dependencies": [
+    {"name":"pdxcat/collectd","version_requirement":">= 4.0.0"},
+    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"},
+    {"name":"puppetlabs/concat","version_requirement":">= 1.0.4"}
+  ]
+}
+
