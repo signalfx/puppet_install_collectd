@@ -1,9 +1,9 @@
 {
   "name": "udaysagar2177-install_collectd",
   "version": "0.1.0",
-  "author": "udaysagar2177",
-  "summary": "A puppet module that just installs collectd from SignalFx repositories",
+  "author": "Uday Sagar Shiramshetty",
   "license": "Apache 2.0",
+  "summary": "A puppet module that just installs collectd from SignalFx repositories",
   "source": "https://github.com/signalfx/puppet_install_collectd",
   "project_page": "https://github.com/signalfx/puppet_install_collectd",
   "issues_url": "https://github.com/signalfx/puppet_install_collectd/issues",
@@ -11,6 +11,40 @@
     {"name":"pdxcat/collectd","version_requirement":">= 4.0.0"},
     {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"},
     {"name":"puppetlabs/concat","version_requirement":">= 1.0.4"}
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Amazon",
+      "operatingsystemrelease": [
+        "2015.03",
+        "2014.09"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "5",
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "12.04",
+        "14.04",
+        "15.04"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "pe",
+      "version_requirement": ">= 3.2.0"
+    },
+    {
+      "name": "puppet",
+      "version_requirement": ">= 3.2.0"
+    }
   ]
 }
-

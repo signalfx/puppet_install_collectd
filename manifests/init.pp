@@ -6,12 +6,14 @@ class install_collectd {
     
     Exec { path => [ "/bin/", "/sbin/" , "/usr/bin/", "/usr/sbin/" ] }
     
+    include 'install_repo'
+
     case $::osfamily {
         'Debian': {
 
 		package { 'collectd-core':
 			ensure => latest,
-			require => Exec['apt-get update']
+			require => Class ['install_repo']
 		}
 
                 class { '::collectd':
@@ -19,25 +21,28 @@ class install_collectd {
                         recurse      => true,
                         purge_config => true,
                         version => latest,
-                        require => Exec['apt-get update']
+			require => Package ['collectd-core']
                 }
 		
-                exec { 'apt-get update':
-                        command => 'apt-get update',
-                        require => Exec['add-apt-repository']
-                }
-
-                exec { 'add-apt-repository':
-                        command => 'apt-get -y install software-properties-common python-software-properties  && sudo add-apt-repository ppa:uday-d/signalfx-collectd1/',
-                        require => Exec['apt-get update II']
-                }
-
-                exec { 'apt-get update II':
-                        command => 'apt-get update',
-                }
-
         }
+	
+	'Redhat': {
 
+                class { '::collectd':
+                        purge        => true,
+                        recurse      => true,
+                        purge_config => true,
+                        version => latest,
+                	require => Class ['install_repo']
+		}
+
+		package { ['collectd-disk', 'collectd-write_http']:
+			provider => 'yum',
+                        ensure => latest,
+			require => Class ['install_repo']
+		}
+        }
+	
         default: {
             fail("${::osfamily} is not supported.")
         }
