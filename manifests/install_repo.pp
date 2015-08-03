@@ -4,10 +4,10 @@ class install_repo inherits install_collectd::repo_params {
 
     case $::osfamily {
         'Debian': {
-                exec { 'add-apt-repository':
+                exec { 'add SignalFx ppa to software sources':
                         command => 'apt-get update &&
-                                    apt-get -y install software-properties-common &&
-                                    apt-get -y install python-software-properties &&
+                                    apt-get -y install software-properties-common && # source package for add-apt-repository command (after Ubuntu 13.10)
+                                    apt-get -y install python-software-properties && # source package for add-apt-repository command (before Ubuntu 13.10)
                                     add-apt-repository ppa:signalfx/collectd-release &&
                                     apt-get update',
                 }
@@ -20,7 +20,7 @@ class install_repo inherits install_collectd::repo_params {
                             command => "yum -y install wget &&
                                         wget ${repo_source} &&
                                         yum -y install --nogpgcheck ${repo_name} &&
-                                        rm -rf ${repo_name}"
+                                        rm -f ${repo_name}"
                     }
             }
             else {
