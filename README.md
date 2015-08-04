@@ -17,7 +17,7 @@ The install_collectd module installs collectd from SignalFx repositories on your
 
 Collectd is a system statistics collection daemon. This module pulls the debian and rpm packages of collectd from SignalFx repositories and installs them on your system. The debian packages are pulled from signalfx/collectd-release ppa and the rpm packages are pulled from Amazon s3 bucket.
 
-Once you have installed this module, you may proceed to install "configure plugins" and "send metrics" puppet modules from SignalFx to configure interesting plugins and send metrics to SignalFx.
+Once you have installed this module, you may proceed to install [configure_collectd_plugins](https://github.com/signalfx/puppet_configure_collectd_plugins) and [send_collectd_metrics](https://github.com/signalfx/puppet_send_collectd_metrics) puppet modules from SignalFx to configure interesting plugins and send metrics to SignalFx.
 
 ## Setup
 Install the latest release of install_collectd module from SignalFx using:
@@ -27,7 +27,7 @@ puppet module install signalfx/install_collectd
 
 ### What install_collectd affects
 
-The install_collectd module installs only the latest version of collectd on your system. It does not configure any plugins. check configure_plugins and send_metrics modules for further functionalities. 
+The install_collectd module installs only the latest version of collectd on your system. It does not configure any plugins. check [configure_collectd_plugins](https://github.com/signalfx/puppet_configure_collectd_plugins) and [send_collectd_metrics](https://github.com/signalfx/puppet_send_collectd_metrics) puppet modules for further functionalities. 
 
 
 ## Usage
