@@ -5,9 +5,11 @@ class install_repo inherits install_collectd::repo_params {
     case $::osfamily {
         'Debian': {
                 exec { 'add SignalFx ppa to software sources':
+                        # software-properties-common is the source package for add-apt-repository command (after Ubuntu 13.10)
+                        # python-software-properties is the source package for add-apt-repository command (before Ubuntu 13.10)
                         command => 'apt-get update &&
-                                    apt-get -y install software-properties-common && # source package for add-apt-repository command (after Ubuntu 13.10)
-                                    apt-get -y install python-software-properties && # source package for add-apt-repository command (before Ubuntu 13.10)
+                                    apt-get -y install software-properties-common && 
+                                    apt-get -y install python-software-properties && 
                                     add-apt-repository ppa:signalfx/collectd-release &&
                                     apt-get update',
                 }
