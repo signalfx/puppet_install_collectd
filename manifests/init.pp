@@ -6,14 +6,14 @@ class install_collectd {
     
     Exec { path => [ "/bin/", "/sbin/" , "/usr/bin/", "/usr/sbin/" ] }
     
-    include 'install_repo'
+    include 'install_collectd::install_repo'
 
     case $::osfamily {
         'Debian': {
 
 		package { 'collectd-core':
 			ensure => latest,
-			require => Class ['install_repo']
+			require => Class['install_repo']
 		}
 
                 class { '::collectd':
@@ -21,7 +21,7 @@ class install_collectd {
                         recurse      => true,
                         purge_config => true,
                         version => latest,
-			require => Package ['collectd-core']
+			require => Package['collectd-core']
                 }
 		
         }
@@ -33,13 +33,13 @@ class install_collectd {
                         recurse      => true,
                         purge_config => true,
                         version => latest,
-                	require => Class ['install_repo']
+                	require => Class['install_repo']
 		}
 
 		package { ['collectd-disk', 'collectd-write_http']:
 			provider => 'yum',
                         ensure => latest,
-			require => Class ['install_repo']
+			require => Class['install_repo']
 		}
         }
 	

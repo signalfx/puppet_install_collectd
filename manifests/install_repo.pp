@@ -1,4 +1,4 @@
-class install_repo inherits install_collectd::repo_params {
+class install_collectd::install_repo inherits install_collectd::repo_params {
 
     Exec { path => [ "/bin/", "/sbin/" , "/usr/bin/", "/usr/sbin/" ] }
 
