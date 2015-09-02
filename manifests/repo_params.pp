@@ -18,7 +18,7 @@ class install_collectd::repo_params {
                                       $repo_source     = 'https://s3.amazonaws.com/public-downloads--signalfuse-com/rpms/SignalFx-rpms/release/SignalFx-RPMs-centos-5-release-1.0-0.noarch.rpm'
         }
                                 default: {
-                                        fail("${::operatingsystemmajrelease} is not supported.")
+                                        fail("Your centos os major release : ${::operatingsystemmajrelease} is not supported.")
                                 }
                         }
                 }
@@ -33,12 +33,12 @@ class install_collectd::repo_params {
                                       $repo_source     = 'https://dl.signalfx.com/rpms/SignalFx-rpms/release/SignalFx-RPMs-AWS_EC2_Linux_2014_09-release-1.0-0.noarch.rpm'
                                 }
                                 default: {
-                                      fail("${::operatingsystemrelease} is not supported.")
+                                      fail("Your operating system release : ${::operatingsystemrelease} is not supported.")
                                 }
                         }
                 }
                 default: {
-                        fail("${::operatingsystem} is not supported.")
+                        fail("Your operating system : ${::operatingsystem} is not supported.")
                 }
         }
 }
