@@ -44,7 +44,7 @@ class install_collectd {
         }
   
         default: {
-            fail("${::osfamily} is not supported.")
+            fail("Your osfamily : ${::osfamily} is not supported.")
         }
     }
 }

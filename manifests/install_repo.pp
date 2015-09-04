@@ -24,21 +24,21 @@ class install_collectd::install_repo inherits install_collectd::repo_params {
             if $::operatingsystemmajrelease == '5' {
                     exec { 'install SignalFx repo  on centos 5':
                     command     => "yum -y install wget &&
-                                   wget ${::repo_source} &&
-                                   yum -y install --nogpgcheck ${::repo_name} &&
-                                   rm -f ${::repo_name}"
+                                   wget ${install_collectd::repo_params::repo_source} &&
+                                   yum -y install --nogpgcheck ${install_collectd::repo_params::repo_name} &&
+                                   rm -f ${install_collectd::repo_params::repo_name}"
                     }
             }
             else {
-                    package { $::repo_name:
+                    package { $install_collectd::repo_params::repo_name:
                             ensure      => latest,
                             provider    => 'rpm',
-                            source      => $::repo_source
+                            source      => $install_collectd::repo_params::repo_source
                     }
             }
         }
         default: {
-              fail("${::osfamily} is not supported.")
+              fail("Your osfamily : ${::osfamily} is not supported.")
         }
     }
 
