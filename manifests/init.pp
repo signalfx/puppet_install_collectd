@@ -44,7 +44,11 @@ class install_collectd {
         }
   
         default: {
+          if versioncmp($::facterversion, '1.6.18') <= 0 and $::operatingsystem == 'Amazon' {
+            fail("Your facter version ${::facterversion} is not supported by our module. More info can be found at https://support.signalfx.com/hc/en-us/articles/205675369")
+          }else {
             fail("Your osfamily : ${::osfamily} is not supported.")
+          }
         }
     }
 }
