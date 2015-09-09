@@ -33,7 +33,11 @@ class install_collectd::repo_params {
                                       $repo_source     = 'https://dl.signalfx.com/rpms/SignalFx-rpms/release/SignalFx-RPMs-AWS_EC2_Linux_2014_09-release-1.0-0.noarch.rpm'
                                 }
                                 default: {
+                                  if versioncmp($::facterversion, '1.6.18') <= 0 and $::operatingsystem == 'Amazon' {
+                                    fail("Your facter version ${::facterversion} is not supported by our module. More info can be found at https://support.signalfx.com/hc/en-us/articles/205675369")
+                                  }else {
                                       fail("Your operating system release : ${::operatingsystemrelease} is not supported.")
+                                  }
                                 }
                         }
                 }
