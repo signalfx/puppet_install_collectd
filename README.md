@@ -1,5 +1,7 @@
 # puppet_install_collectd
 
+[![Build Status](https://travis-ci.org/signalfx/puppet_install_collectd.svg?branch=travis_tests)](https://travis-ci.org/signalfx/puppet_install_collectd)
+
 #### Table of Contents
 
 1. [Overview](#overview)

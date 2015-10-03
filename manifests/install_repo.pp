@@ -11,7 +11,7 @@ class install_collectd::install_repo inherits install_collectd::repo_params {
                 # add-apt-repository command (after Ubuntu 13.10)
                 # python-software-properties is the source package for
                 # add-apt-repository command (before Ubuntu 13.10)
-                command     => 'apt-get update &&
+                command    => 'apt-get update &&
                                apt-get -y install software-properties-common && 
                                apt-get -y install python-software-properties && 
                                add-apt-repository ppa:signalfx/collectd-release &&
@@ -23,7 +23,7 @@ class install_collectd::install_repo inherits install_collectd::repo_params {
 
             if $::operatingsystemmajrelease == '5' {
                     exec { 'install SignalFx repo  on centos 5':
-                    command     => "yum -y install wget &&
+                    command   =>  "yum -y install wget &&
                                    wget ${install_collectd::repo_params::repo_source} &&
                                    yum -y install --nogpgcheck ${install_collectd::repo_params::repo_name} &&
                                    rm -f ${install_collectd::repo_params::repo_name}"
@@ -31,9 +31,9 @@ class install_collectd::install_repo inherits install_collectd::repo_params {
             }
             else {
                     package { $install_collectd::repo_params::repo_name:
-                            ensure      => latest,
-                            provider    => 'rpm',
-                            source      => $install_collectd::repo_params::repo_source
+                            ensure   => latest,
+                            provider => 'rpm',
+                            source   => $install_collectd::repo_params::repo_source
                     }
             }
         }
