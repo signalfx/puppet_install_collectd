@@ -12,16 +12,16 @@ class install_collectd {
         'Debian': {
 
                 package { 'collectd-core':
-                        ensure           => latest,
-                        require          => Class['install_repo']
+                        ensure  => latest,
+                        require => Class['install_repo']
                 }
 
                 class { '::collectd':
-                        purge            => true,
-                        recurse          => true,
-                        purge_config     => true,
-                        version          => latest,
-                        require          => Package['collectd-core']
+                        purge        => true,
+                        recurse      => true,
+                        purge_config => true,
+                        version      => latest,
+                        require      => Package['collectd-core']
                 }
     
         }
@@ -29,17 +29,17 @@ class install_collectd {
         'Redhat': {
 
                 class { '::collectd':
-                        purge            => true,
-                        recurse          => true,
-                        purge_config     => true,
-                        version          => latest,
-                        require          => Class['install_repo']
+                        purge        => true,
+                        recurse      => true,
+                        purge_config => true,
+                        version      => latest,
+                        require      => Class['install_repo']
                 }
 
                 package { ['collectd-disk', 'collectd-write_http']:
-                        ensure           => latest,
-                        provider         => 'yum',
-                        require          => Class['install_repo']
+                        ensure   => latest,
+                        provider => 'yum',
+                        require  => Class['install_repo']
                 }
         }
   
