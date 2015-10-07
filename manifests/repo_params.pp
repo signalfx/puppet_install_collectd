@@ -6,10 +6,12 @@ class install_collectd::repo_params {
     'CentOS': {
                         case $::operatingsystemmajrelease {
                                 '7': {
+                                      $old_repo_name   = 'SignalFx-RPMs-centos-7-release'
                                       $repo_name       = 'SignalFx-collectd-RPMs-centos-7-release'
                                       $repo_source     = 'https://dl.signalfx.com/rpms/SignalFx-rpms/release/SignalFx-collectd-RPMs-centos-7-release-latest.noarch.rpm'
                                 }
                                 '6': {
+                                      $old_repo_name   = 'SignalFx-RPMs-centos-6-release'
                                       $repo_name       = 'SignalFx-collectd-RPMs-centos-6-release'
                                       $repo_source     = 'https://dl.signalfx.com/rpms/SignalFx-rpms/release/SignalFx-collectd-RPMs-centos-6-release-latest.noarch.rpm'
                                 }
@@ -21,14 +23,17 @@ class install_collectd::repo_params {
                 'Amazon': {
                         case $::operatingsystemrelease {
                                 '2015.09': {
+                                      $old_repo_name   = 'SignalFx-RPMs-AWS_EC2_Linux_2015_09-release'
                                       $repo_name       = 'SignalFx-collectd-RPMs-AWS_EC2_Linux_2015_09-release'
                                       $repo_source     = 'https://dl.signalfx.com/rpms/SignalFx-rpms/release/SignalFx-collectd-RPMs-AWS_EC2_Linux_2015_09-release-latest.noarch.rpm'
                                 }
                                 '2015.03': {
+                                      $old_repo_name   = 'SignalFx-RPMs-AWS_EC2_Linux_2015_03-release'
                                       $repo_name       = 'SignalFx-collectd-RPMs-AWS_EC2_Linux_2015_03-release'
                                       $repo_source     = 'https://dl.signalfx.com/rpms/SignalFx-rpms/release/SignalFx-collectd-RPMs-AWS_EC2_Linux_2015_03-release-latest.noarch.rpm'
                                 }
                                 '2014.09': {
+                                      $old_repo_name   = 'SignalFx-RPMs-AWS_EC2_Linux_2014_09-release'
                                       $repo_name       = 'SignalFx-collectd-RPMs-AWS_EC2_Linux_2014_09-release'
                                       $repo_source     = 'https://dl.signalfx.com/rpms/SignalFx-rpms/release/SignalFx-collectd-RPMs-AWS_EC2_Linux_2014_09-release-latest.noarch.rpm'
                                 }

@@ -3,7 +3,7 @@
 class install_collectd::install_repo inherits install_collectd::repo_params {
 
     Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
-
+    
     case $::osfamily {
         'Debian': {
             exec { 'add SignalFx ppa to software sources':
@@ -20,6 +20,9 @@ class install_collectd::install_repo inherits install_collectd::repo_params {
           }
 
         'Redhat':{
+            package { $install_collectd::repo_params::old_repo_name:
+                    ensure  => absent
+            }
 
             if $::operatingsystemmajrelease == '5' {
                     exec { 'install SignalFx repo  on centos 5':
