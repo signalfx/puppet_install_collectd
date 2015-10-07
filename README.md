@@ -47,9 +47,8 @@ Currently, the supported operating systems are
   1. Ubuntu 12.04
   2. Ubuntu 14.04
   3. Ubuntu 15.04
-  4. CentOS 5
-  5. CentOS 6
-  6. CentOS 7
-  7. Amazon Linux 2014.09
-  8. Amazon Linux 2015.03.
-
+  4. CentOS 6
+  5. CentOS 7
+  6. Amazon Linux 2014.09
+  7. Amazon Linux 2015.03
+  8. Amazon Linux 2015.09
