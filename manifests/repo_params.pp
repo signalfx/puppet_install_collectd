@@ -6,17 +6,15 @@ class install_collectd::repo_params {
     'CentOS': {
                         case $::operatingsystemmajrelease {
                                 '7': {
-                                      $repo_name       = 'SignalFx-RPMs-centos-7-release'
-                                      $repo_source     = 'https://dl.signalfx.com/rpms/SignalFx-rpms/release/SignalFx-RPMs-centos-7-release-1.0-0.noarch.rpm'
+                                      $old_repo_name   = 'SignalFx-RPMs-centos-7-release'
+                                      $repo_name       = 'SignalFx-collectd-RPMs-centos-7-release'
+                                      $repo_source     = 'https://dl.signalfx.com/rpms/SignalFx-rpms/release/SignalFx-collectd-RPMs-centos-7-release-latest.noarch.rpm'
                                 }
                                 '6': {
-                                      $repo_name       = 'SignalFx-RPMs-centos-6-release'
-                                      $repo_source     = 'https://dl.signalfx.com/rpms/SignalFx-rpms/release/SignalFx-RPMs-centos-6-release-1.0-0.noarch.rpm'
-        }
-                                '5': {
-                                      $repo_name       = 'SignalFx-RPMs-centos-5-release-1.0-0.noarch.rpm'
-                                      $repo_source     = 'https://s3.amazonaws.com/public-downloads--signalfuse-com/rpms/SignalFx-rpms/release/SignalFx-RPMs-centos-5-release-1.0-0.noarch.rpm'
-        }
+                                      $old_repo_name   = 'SignalFx-RPMs-centos-6-release'
+                                      $repo_name       = 'SignalFx-collectd-RPMs-centos-6-release'
+                                      $repo_source     = 'https://dl.signalfx.com/rpms/SignalFx-rpms/release/SignalFx-collectd-RPMs-centos-6-release-latest.noarch.rpm'
+                                }
                                 default: {
                                         fail("Your centos os major release : ${::operatingsystemmajrelease} is not supported.")
                                 }
@@ -24,13 +22,20 @@ class install_collectd::repo_params {
                 }
                 'Amazon': {
                         case $::operatingsystemrelease {
+                                '2015.09': {
+                                      $old_repo_name   = 'SignalFx-RPMs-AWS_EC2_Linux_2015_09-release'
+                                      $repo_name       = 'SignalFx-collectd-RPMs-AWS_EC2_Linux_2015_09-release'
+                                      $repo_source     = 'https://dl.signalfx.com/rpms/SignalFx-rpms/release/SignalFx-collectd-RPMs-AWS_EC2_Linux_2015_09-release-latest.noarch.rpm'
+                                }
                                 '2015.03': {
-                                      $repo_name       = 'SignalFx-RPMs-AWS_EC2_Linux_2015_03-release'
-                                      $repo_source     = 'https://dl.signalfx.com/rpms/SignalFx-rpms/release/SignalFx-RPMs-AWS_EC2_Linux_2015_03-release-1.0-0.noarch.rpm'
+                                      $old_repo_name   = 'SignalFx-RPMs-AWS_EC2_Linux_2015_03-release'
+                                      $repo_name       = 'SignalFx-collectd-RPMs-AWS_EC2_Linux_2015_03-release'
+                                      $repo_source     = 'https://dl.signalfx.com/rpms/SignalFx-rpms/release/SignalFx-collectd-RPMs-AWS_EC2_Linux_2015_03-release-latest.noarch.rpm'
                                 }
                                 '2014.09': {
-                                      $repo_name       = 'SignalFx-RPMs-AWS_EC2_Linux_2014_09-release'
-                                      $repo_source     = 'https://dl.signalfx.com/rpms/SignalFx-rpms/release/SignalFx-RPMs-AWS_EC2_Linux_2014_09-release-1.0-0.noarch.rpm'
+                                      $old_repo_name   = 'SignalFx-RPMs-AWS_EC2_Linux_2014_09-release'
+                                      $repo_name       = 'SignalFx-collectd-RPMs-AWS_EC2_Linux_2014_09-release'
+                                      $repo_source     = 'https://dl.signalfx.com/rpms/SignalFx-rpms/release/SignalFx-collectd-RPMs-AWS_EC2_Linux_2014_09-release-latest.noarch.rpm'
                                 }
                                 default: {
                                   if versioncmp($::facterversion, '1.6.18') <= 0 and $::operatingsystem == 'Amazon' {
