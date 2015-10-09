@@ -2,7 +2,9 @@
 #
 # This module installs collectd from SignalFx repositories
 #
-class install_collectd {
+class install_collectd (
+    $ensure = present
+) {
     
     Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
     
@@ -12,7 +14,7 @@ class install_collectd {
         'Debian': {
 
                 package { 'collectd-core':
-                        ensure  => latest,
+                        ensure  => $ensure,
                         require => Class['install_repo']
                 }
 
@@ -20,7 +22,7 @@ class install_collectd {
                         purge        => true,
                         recurse      => true,
                         purge_config => true,
-                        version      => latest,
+                        version      => $ensure,
                         require      => Package['collectd-core']
                 }
     
@@ -32,12 +34,12 @@ class install_collectd {
                         purge        => true,
                         recurse      => true,
                         purge_config => true,
-                        version      => latest,
+                        version      => $ensure,
                         require      => Class['install_repo']
                 }
 
                 package { ['collectd-disk', 'collectd-write_http']:
-                        ensure   => latest,
+                        ensure   => $ensure,
                         provider => 'yum',
                         require  => Class['install_repo']
                 }
