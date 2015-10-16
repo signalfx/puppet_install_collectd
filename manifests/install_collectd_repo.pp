@@ -1,9 +1,13 @@
 # installs the SignalFx repositories on your system
 #
-class install_collectd::install_repo inherits install_collectd::repo_params {
+class install_collectd::install_collectd_repo(
+  $ppa,
+) inherits install_collectd::repo_params {
 
     Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
-    
+    exec {"install collectd repo date":
+      command => "date"
+    } 
     case $::osfamily {
         'Debian': {
             exec { 'add SignalFx ppa to software sources':
@@ -11,14 +15,18 @@ class install_collectd::install_repo inherits install_collectd::repo_params {
                 # add-apt-repository command (after Ubuntu 13.10)
                 # python-software-properties is the source package for
                 # add-apt-repository command (before Ubuntu 13.10)
-                command    => 'apt-get update &&
+                command    => "apt-get update &&
                                apt-get -y install software-properties-common && 
                                apt-get -y install python-software-properties && 
-                               add-apt-repository ppa:signalfx/collectd-release &&
-                               apt-get update',
+                               add-apt-repository ${ppa} &&
+                               apt-get update",
                   }
+            if !('ppa:signalfx' in $ppa) {
+                exec { 'add apt-key':
+                    command => 'apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 68EA6297FE128AB0'
+                }
+            }
           }
-
         'Redhat':{
             package { $install_collectd::repo_params::old_repo_name:
                     ensure  => absent
