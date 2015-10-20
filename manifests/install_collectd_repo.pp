@@ -5,11 +5,15 @@ class install_collectd::install_collectd_repo(
 ) inherits install_collectd::repo_params {
 
     Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
-    exec {"install collectd repo date":
-      command => "date"
-    } 
+    
     case $::osfamily {
         'Debian': {
+            if !('ppa:signalfx' in $ppa) {
+                exec { 'add apt-key':
+                    command => 'apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 68EA6297FE128AB0',
+                    before  => Exec['add SignalFx ppa to software sources']
+                }
+            }
             exec { 'add SignalFx ppa to software sources':
                 # software-properties-common is the source package for
                 # add-apt-repository command (after Ubuntu 13.10)
@@ -21,31 +25,16 @@ class install_collectd::install_collectd_repo(
                                add-apt-repository ${ppa} &&
                                apt-get update",
                   }
-            if !('ppa:signalfx' in $ppa) {
-                exec { 'add apt-key':
-                    command => 'apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 68EA6297FE128AB0'
-                }
-            }
           }
         'Redhat':{
             package { $install_collectd::repo_params::old_repo_name:
                     ensure  => absent
             }
 
-            if $::operatingsystemmajrelease == '5' {
-                    exec { 'install SignalFx repo  on centos 5':
-                    command   =>  "yum -y install wget &&
-                                   wget ${install_collectd::repo_params::repo_source} &&
-                                   yum -y install --nogpgcheck ${install_collectd::repo_params::repo_name} &&
-                                   rm -f ${install_collectd::repo_params::repo_name}"
-                    }
-            }
-            else {
-                    package { $install_collectd::repo_params::repo_name:
-                            ensure   => latest,
-                            provider => 'rpm',
-                            source   => $install_collectd::repo_params::repo_source
-                    }
+            package { $install_collectd::repo_params::repo_name:
+                    ensure   => latest,
+                    provider => 'rpm',
+                    source   => $install_collectd::repo_params::repo_source
             }
         }
         default: {
