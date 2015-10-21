@@ -8,15 +8,14 @@ define install_collectd::collectd_utils (
 ) {
     
     $typesdb                = []
-    $include                = [] 
+    $include                = []
     $interval               = 10
     $threads                = 5
     $timeout                = 2
     $fqdnlookup             = true
     $collectd_hostname      = $::hostname
     $write_queue_limit_high = undef
-    $write_queue_limit_low  = undef 
-   
+    $write_queue_limit_low  = undef
     file { 'collectd.d':
       ensure  => directory,
       path    => $plugin_conf_dir,
