@@ -17,17 +17,11 @@ The install_collectd module installs the latest build of collectd from [SignalFx
 
 This is one of three modules provided by SignalFx for managing collectd. See [Module Description](#module-description). 
 
-## Module Description
-
-Collectd is a system statistics collection daemon. This module pulls SignalFx's latest Debian or RPM package of collectd as appropriate for your system, and uses it to install collectd. Debian packages are pulled from signalfx/collectd-release PPA. RPM packages are pulled from SignalFx's Amazon S3 bucket.
-
-This is one of three modules provided by SignalFx for managing collectd. 
-
-Module name | Description 
+Module name | Description
 ------------| ------------
-puppet_install_collectd | Install and stay up-to-date with SignalFx's latest build of collectd. 
-[configure_collectd_plugins](https://forge.puppetlabs.com/signalfx/configure_collectd_plugins) | Enable and configure a set of collectd plugins that work well with SignalFx. 
-[send_collectd_metrics](https://forge.puppetlabs.com/signalfx/send_collectd_metrics) | Configure collectd to send metrics to SignalFx. 
+puppet_install_collectd | Install and stay up-to-date with SignalFx's latest build of collectd.
+[configure_collectd_plugins](https://forge.puppetlabs.com/signalfx/configure_collectd_plugins) | Enable and configure a set of collectd plugins that work well with SignalFx.
+[send_collectd_metrics](https://forge.puppetlabs.com/signalfx/send_collectd_metrics) | Configure collectd to send metrics to SignalFx.
 
 ## Setup
 Install the latest release of install_collectd module from SignalFx using:
@@ -37,14 +31,24 @@ puppet module install signalfx/install_collectd
 
 ### What install_collectd affects
 
-The install_collectd module only installs SignalFx's latest build of collectd on your system. SignalFx provides additional modules to configure collectd plugins and send metrics to SignalFx. See [Module Description](#module-description). 
+The install_collectd module only installs SignalFx's latest build of collectd on your system. SignalFx provides additional modules to configure collectd plugins and send metrics to SignalFx. See [Module Description](#module-description).
 
 ## Usage
 
-The install_collectd module does not have any parameters. Including this module is as simple as:
+Install_collectd module accepts two parameters:
+
+**1. ensure**
+Default value of ensure is present. There are three supported cases:  
+  1.1. If your system does not have any existing collectd, the default value, 'present' allows the module to install the latest collectd packages from SignalFx repositories.  
+  1.2. If you want to install only a specific version of collectd, you can set 'version' as this parameter's value. For example, set ensure as '5.5.0-sfx3~trusty' to get the exact specified version.  
+  1.3. If your system already has collectd, you have to change this value to 'latest' to get the newest version. (Remember to change this value back to present once you have updated all your nodes, else, puppet will be automatically updating your collectd version as new packages are released by SignalFx)  
+
+**2. ppa**  
+The variable ppa allows the module to point to your local repository(cloned from SignalFx) before installing collectd.
 ```shell
-node default {
-  include 'install_collectd'
+class { 'install_collectd':
+  ensure => "present",
+  ppa => 'ppa:signalfx/collectd-release'
 }
 ```
 

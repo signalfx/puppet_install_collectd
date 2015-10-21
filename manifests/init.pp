@@ -4,7 +4,7 @@
 #
 class install_collectd (
     $ensure = present,
-    $ppa = 'ppa:signalfx/collectd-beta'
+    $ppa = 'ppa:signalfx/collectd-release'
 )  inherits install_collectd::repo_params {
 
     Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
