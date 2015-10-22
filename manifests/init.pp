@@ -3,8 +3,11 @@
 # This module installs collectd from SignalFx repositories
 #
 class install_collectd (
-    $ensure = present,
-    $ppa = 'ppa:signalfx/collectd-release'
+    $ensure       = present,
+    $ppa          = 'ppa:signalfx/collectd-release',
+    $purge        = undef,
+    $recurse      = undef,
+    $purge_config = false
 )  inherits install_collectd::repo_params {
 
   Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
@@ -32,9 +35,9 @@ class install_collectd (
           ensure  => $ensure,
       }
       install_collectd::collectd_utils { 'debian_utils':
-        purge           => true,
-        recurse         => true,
-        purge_config    => true,
+        purge           => $purge,
+        recurse         => $recurse,
+        purge_config    => $purge_config,
         plugin_conf_dir => '/etc/collectd/conf.d',
         config_file     => '/etc/collectd/collectd.conf',
         require         => Package['collectd-core', 'collectd']
@@ -57,9 +60,9 @@ class install_collectd (
         provider => 'yum'
       }
       install_collectd::collectd_utils { 'redhat_utils':
-        purge           => true,
-        recurse         => true,
-        purge_config    => true,
+        purge           => $purge,
+        recurse         => $recurse,
+        purge_config    => $purge_config,
         plugin_conf_dir => '/etc/collectd.d',
         config_file     => '/etc/collectd.conf',
         require         => Package['collectd', 'collectd-disk', 'collectd-write_http']

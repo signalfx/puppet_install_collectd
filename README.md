@@ -35,7 +35,7 @@ The install_collectd module only installs SignalFx's latest build of collectd on
 
 ## Usage
 
-Install_collectd module accepts two parameters:
+Install_collectd module accepts various parameters:
 
 **1. ensure**
 Default value of ensure is present. There are three supported cases:  
@@ -47,10 +47,15 @@ Default value of ensure is present. There are three supported cases:
 The variable ppa allows the module to point to your local repository(cloned from SignalFx) before installing collectd.
 ```shell
 class { 'install_collectd':
-  ensure => "present",
-  ppa => 'ppa:signalfx/collectd-release'
+  ensure       => "present",
+  ppa          => 'ppa:signalfx/collectd-release',
+  purge        => undef,
+  recurse      => undef,
+  purge_config => false
 }
 ```
+**3. others**
+Set purge, recurse and purge_config to true to delete your existing collectd folders in case 1.3 and install just the latest version of collectd.  
 
 ## Limitations
 
