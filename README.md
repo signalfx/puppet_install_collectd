@@ -44,18 +44,24 @@ Default value of ensure is present. There are three supported cases:
   1.3. If your system already has collectd, you have to change this value to 'latest' to get the newest version. (Remember to change this value back to present once you have updated all your nodes, else, puppet will be automatically updating your collectd version as new packages are released by SignalFx)  
 
 **2. ppa**  
-The variable ppa allows the module to point to your local repository(cloned from SignalFx) before installing collectd.
+This optional variable applies to Ubuntu systems. It allows the module to use your local repository(cloned from SignalFx) for collectd packages. Default value is appropriate up-to-date ppa hosted by SignalFx.
+
 ```shell
 class { 'install_collectd':
   ensure       => "present",
   ppa          => 'ppa:signalfx/collectd-release',
+  debian_ppa   => "deb https://dl.signalfx.com/debs/collectd/jessie/release /",
   purge        => undef,
   recurse      => undef,
   purge_config => false
 }
 ```
-**3. others**
-Set purge, recurse and purge_config to true to delete your existing collectd folders in case 1.3 and install just the latest version of collectd.  
+
+**3. debian_ppa**
+This optional variable applies to Debian GNU/Linux 7 and 8. It allows the module to use your local repository(cloned from SignalFx) for collectd packages. Default value is appropriate up-to-date ppa hosted by SignalFx.
+
+**4. others**
+Set purge, recurse and purge_config to true to delete your existing collectd folders in case 1.3 and install just the latest version of collectd. The default values for purge, recurse and purge_config are undef, undef and false respectively.
 
 ## Limitations
 
@@ -68,3 +74,5 @@ Currently, the supported operating systems are
   6. Amazon Linux 2014.09
   7. Amazon Linux 2015.03
   8. Amazon Linux 2015.09
+  9. Debian GNU/Linux 7 (wheezy)
+  10. Debian GNU/Linux 8 (jessie)

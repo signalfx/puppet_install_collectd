@@ -3,7 +3,22 @@
 class install_collectd::repo_params {
         case $::operatingsystem {
                 'Ubuntu':{}
-    'CentOS': {
+                'Debian':{
+                        case $::operatingsystemmajrelease {
+                                '7': {
+                                      $signalfx_public_keyid = '185894C15AE495F6'
+                                      $repo_source           = 'deb https://dl.signalfx.com/debs/collectd/wheezy/release /'
+                                }
+                                '8': {
+                                      $signalfx_public_keyid = '185894C15AE495F6'
+                                      $repo_source           = 'deb https://dl.signalfx.com/debs/collectd/jessie/release /'
+                                }
+                                default: {
+                                        fail("Your Debian OS major release : ${::operatingsystemmajrelease} is not supported.")
+                                }
+                        }
+                }
+                'CentOS': {
                         case $::operatingsystemmajrelease {
                                 '7': {
                                       $old_repo_name   = 'SignalFx-RPMs-centos-7-release'
@@ -16,7 +31,7 @@ class install_collectd::repo_params {
                                       $repo_source     = 'https://dl.signalfx.com/rpms/SignalFx-rpms/release/SignalFx-collectd-RPMs-centos-6-release-latest.noarch.rpm'
                                 }
                                 default: {
-                                        fail("Your centos os major release : ${::operatingsystemmajrelease} is not supported.")
+                                        fail("Your CentOS OS major release : ${::operatingsystemmajrelease} is not supported.")
                                 }
                         }
                 }
