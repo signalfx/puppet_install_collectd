@@ -3,33 +3,49 @@
 # This module installs collectd from SignalFx repositories
 #
 class install_collectd (
-    $ensure       = present,
-    $ppa          = 'ppa:signalfx/collectd-release',
-    $purge        = undef,
-    $recurse      = undef,
-    $purge_config = false
+    $ensure         = present,
+    $ppa            = 'ppa:signalfx/collectd-release',
+    $debian_ppa     = "\"${install_collectd::repo_params::repo_source}\"",
+    $purge          = undef,
+    $recurse        = undef,
+    $purge_config   = false
 )  inherits install_collectd::repo_params {
 
   Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
+
   case $::osfamily {
     'Debian': {
-      if !('ppa:signalfx' in $ppa) {
-        exec { 'add apt-key':
-          command => 'apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 68EA6297FE128AB0',
+      if ($::operatingsystem == 'Debian'){
+        exec { 'add SignalFx public key id':
+          command => "apt-key adv --keyserver keyserver.ubuntu.com --recv-keys ${install_collectd::repo_params::signalfx_public_keyid}",
           before  => Exec['add SignalFx ppa to software sources']
         }
-      }
-      exec { 'add SignalFx ppa to software sources':
-        # software-properties-common is the source package for
-        # add-apt-repository command (after Ubuntu 13.10)
-        # python-software-properties is the source package for
-        # add-apt-repository command (before Ubuntu 13.10)
-        command => "apt-get update &&
-                   apt-get -y install software-properties-common &&
-                   apt-get -y install python-software-properties &&
-                   add-apt-repository ${ppa} &&
-                   apt-get update",
-        before  => Package['collectd-core', 'collectd']
+        ensure_resource('package', 'apt-transport-https', {'ensure' => 'present'})
+        exec { 'add SignalFx ppa to software sources':
+          command => "echo ${debian_ppa} > /etc/apt/sources.list.d/signalfx_collectd.list && 
+                      apt-get update",
+          before  => Package['collectd-core', 'collectd'],
+          require => Package['apt-transport-https']
+        }
+      }else{
+        if !('ppa:signalfx' in $ppa) {
+          exec { 'add apt-key':
+            command => 'apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 68EA6297FE128AB0',
+            before  => Exec['add SignalFx ppa to software sources']
+          }
+        }
+        exec { 'add SignalFx ppa to software sources':
+          # software-properties-common is the source package for
+          # add-apt-repository command (after Ubuntu 13.10)
+          # python-software-properties is the source package for
+          # add-apt-repository command (before Ubuntu 13.10)
+          command => "apt-get update &&
+                     apt-get -y install software-properties-common &&
+                     apt-get -y install python-software-properties &&
+                     add-apt-repository ${ppa} &&
+                     apt-get update",
+          before  => Package['collectd-core', 'collectd']
+        }
       }
       package { ['collectd-core', 'collectd']:
           ensure  => $ensure,
