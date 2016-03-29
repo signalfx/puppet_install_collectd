@@ -6,12 +6,14 @@ define collectd::config {
       $include_plugin_dirs         = ['/etc/collectd/managed_config', '/etc/collectd/filtering_config']
       $config_file                 = '/etc/collectd/collectd.conf'
       $filtering_config_file       = '/etc/collectd/filtering_config/filtering.conf'
+      $aggregation_config_file     = '/etc/collectd/managed_config/10-aggregation-cpu.conf'
   }
   if $::osfamily == 'Redhat' {
       $plugin_config_dir_tree     = ['/etc/collectd.d/', '/etc/collectd.d/managed_config', '/etc/collectd.d/filtering_config']
       $include_plugin_dirs        = ['/etc/collectd.d/managed_config', '/etc/collectd.d/filtering_config']
       $config_file                = '/etc/collectd.conf'
       $filtering_config_file      = '/etc/collectd.d/filtering_config/filtering.conf'
+      $aggregation_config_file    = '/etc/collectd.d/managed_config/10-aggregation-cpu.conf'
   }
   
   file { $plugin_config_dir_tree :
@@ -23,6 +25,10 @@ define collectd::config {
   file { $config_file:
       content => template('collectd/collectd.conf.erb'),
       notify  => Service['collectd'],
+  } ->
+  file { $aggregation_config_file :
+      content  => template('collectd/aggregation-cpu.conf.erb'),
+      notify   => Service['collectd']
   } ->
   file { $filtering_config_file:
       content => template('collectd/filtering.conf.erb'),
