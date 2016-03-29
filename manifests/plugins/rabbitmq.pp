@@ -11,7 +11,8 @@ class collectd::plugins::rabbitmq (
   $collect_nodes        = true,
   $collect_queues       = true,
   $http_timeout         = 'UNSET',
-  $verbosity_level      = 'UNSET'
+  $verbosity_level      = 'UNSET',
+  $field_length         = 1024,
 ) {
   
   file { '/opt/collectd-rabbitmq':

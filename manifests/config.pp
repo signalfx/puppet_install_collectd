@@ -29,7 +29,7 @@ define collectd::config {
       notify  => Service['collectd'],
   }
   
-  file { $collectd::log_file: 
+  file { $collectd::log_file:
     ensure => present
   }
   
