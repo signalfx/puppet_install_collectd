@@ -1,96 +1,52 @@
-# Class: install_collectd
+# Class: collectd
 #
 # This module installs collectd from SignalFx repositories
 #
-class install_collectd (
-    $ensure         = present,
-    $ppa            = 'ppa:signalfx/collectd-release',
-    $debian_ppa     = "\"${install_collectd::repo_params::repo_source}\"",
-    $purge          = undef,
-    $recurse        = undef,
-    $purge_config   = false
-)  inherits install_collectd::repo_params {
-
+class collectd (
+    $signalfx_api_token,
+    $ensure_signalfx_collectd_version  = present,
+    $signalfx_collectd_repo_source     = $collectd::params::signalfx_collectd_repo_source,
+    $fqdnlookup                        = $collectd::params::fqdnlookup,
+    $hostname                          = $collectd::params::hostname,
+    $interval                          = $collectd::params::interval,
+    $timeout                           = $collectd::params::timeout,
+    $read_threads                      = $collectd::params::read_threads,
+    $write_queue_limit_high            = $collectd::params::write_queue_limit_high,
+    $write_queue_limit_low             = $collectd::params::write_queue_limit_low,
+    $collect_internal_stats            = $collectd::params::collect_internal_stats,
+    $flush_interval                    = $collectd::params::flush_interval,
+    $flush_timeout                     = $collectd::params::flush_timeout,
+    $log_file                          = $collectd::params::log_file,
+    $dimension_list                    = $collectd::params::dimension_list,
+    $signalfx_api_endpoint             = $collectd::params::signalfx_api_endpoint,
+    $write_http_timeout                = $collectd::params::write_http_timeout,
+    $write_http_buffersize             = $collectd::params::write_http_buffersize,
+    $write_http_flush_interval         = $collectd::params::write_http_flush_interval,
+    $write_http_log_http_error         = $collectd::params::write_http_log_http_error,
+    $ensure_signalfx_plugin_version    = $collectd::params::ensure_signalfx_plugin_version,
+    $signalfx_plugin_repo_source       = $collectd::params::signalfx_plugin_repo_source,
+    $aws_integration                   = $collectd::params::aws_integration,
+    $signalfx_plugin_log_traces        = $collectd::params::signalfx_plugin_log_traces,
+    $signalfx_plugin_interactive       = $collectd::params::signalfx_plugin_interactive,
+    $signalfx_plugin_notifications     = $collectd::params::signalfx_plugin_notifications,
+    $signalfx_plugin_notify_level      = $collectd::params::signalfx_plugin_notify_level,
+    $signalfx_plugin_dpm               = $collectd::params::signalfx_plugin_dpm
+)  inherits collectd::params {
+  
   Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
-
-  case $::osfamily {
-    'Debian': {
-      if ($::operatingsystem == 'Debian'){
-        exec { 'add SignalFx public key id':
-          command => "apt-key adv --keyserver keyserver.ubuntu.com --recv-keys ${install_collectd::repo_params::signalfx_public_keyid}",
-          before  => Exec['add SignalFx ppa to software sources']
-        }
-        ensure_resource('package', 'apt-transport-https', {'ensure' => 'present'})
-        exec { 'add SignalFx ppa to software sources':
-          command => "echo ${debian_ppa} > /etc/apt/sources.list.d/signalfx_collectd.list && 
-                      apt-get update",
-          before  => Package['collectd-core', 'collectd'],
-          require => Package['apt-transport-https']
-        }
-      }else{
-        if !('ppa:signalfx' in $ppa) {
-          exec { 'add apt-key':
-            command => 'apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 68EA6297FE128AB0',
-            before  => Exec['add SignalFx ppa to software sources']
-          }
-        }
-        exec { 'add SignalFx ppa to software sources':
-          # software-properties-common is the source package for
-          # add-apt-repository command (after Ubuntu 13.10)
-          # python-software-properties is the source package for
-          # add-apt-repository command (before Ubuntu 13.10)
-          command => "apt-get update &&
-                     apt-get -y install software-properties-common &&
-                     apt-get -y install python-software-properties &&
-                     add-apt-repository ${ppa} &&
-                     apt-get update",
-          before  => Package['collectd-core', 'collectd']
-        }
-      }
-      package { ['collectd-core', 'collectd']:
-          ensure  => $ensure,
-      }
-      install_collectd::collectd_utils { 'debian_utils':
-        purge           => $purge,
-        recurse         => $recurse,
-        purge_config    => $purge_config,
-        plugin_conf_dir => '/etc/collectd/conf.d',
-        config_file     => '/etc/collectd/collectd.conf',
-        require         => Package['collectd-core', 'collectd']
-      }
-    }
-    'Redhat': {
-      package { $install_collectd::repo_params::old_repo_name:
-        ensure  => absent
-      }
-
-      package { $install_collectd::repo_params::repo_name:
-        ensure   => latest,
-        provider => 'rpm',
-        source   => $install_collectd::repo_params::repo_source,
-        before   => Package['collectd', 'collectd-disk', 'collectd-write_http']
-      }
-
-      package { ['collectd', 'collectd-disk', 'collectd-write_http']:
-        ensure   => $ensure,
-        provider => 'yum'
-      }
-      install_collectd::collectd_utils { 'redhat_utils':
-        purge           => $purge,
-        recurse         => $recurse,
-        purge_config    => $purge_config,
-        plugin_conf_dir => '/etc/collectd.d',
-        config_file     => '/etc/collectd.conf',
-        require         => Package['collectd', 'collectd-disk', 'collectd-write_http']
-      }
-    }
-
-    default: {
-      if versioncmp($::facterversion, '1.6.18') <= 0 and $::operatingsystem == 'Amazon' {
-        fail("Your facter version ${::facterversion} is not supported by our module. More info can be found at https://support.signalfx.com/hc/en-us/articles/205675369")
-      }else {
-        fail("Your osfamily : ${::osfamily} is not supported.")
-      }
-    }
+  # Be careful of dependencies here ( -> )
+  collectd::check_os_compatibility { $title: 
+  } ->
+  collectd::get_signalfx_repository { $title :
+  } ->
+  collectd::install { $title :
+  } ->
+  collectd::config { $title : 
+  } ->
+  collectd::send_metrics { $title :
+  }
+  service { 'collectd':
+      ensure  => running,
+      require => Package['collectd']
   }
 }
