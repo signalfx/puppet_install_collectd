@@ -1,12 +1,12 @@
 {
-  "name": "signalfx-install_collectd",
-  "version": "0.1.6",
+  "name": "signalfx-collectd",
+  "version": "0.1.7",
   "author": "Uday Sagar Shiramshetty",
-  "summary": "A puppet module that just installs collectd from SignalFx repositories",
+  "summary": "A puppet module that just configures complete collectd from SignalFx",
   "license": "Apache-2.0",
-  "source": "https://github.com/signalfx/puppet_install_collectd",
-  "project_page": "https://github.com/signalfx/puppet_install_collectd",
-  "issues_url": "https://github.com/signalfx/puppet_install_collectd/issues",
+  "source": "https://github.com/signalfx/puppet_collectd",
+  "project_page": "https://github.com/signalfx/puppet_collectd",
+  "issues_url": "https://github.com/signalfx/puppet_collectd/issues",
   "operatingsystem_support": [
     {
       "operatingsystem": "Debian",
@@ -18,6 +18,7 @@
     {
       "operatingsystem": "Amazon",
       "operatingsystemrelease": [
+      	"2015.09",
         "2015.03",
         "2014.09"
       ]
@@ -50,8 +51,10 @@
     }
   ],
   "dependencies": [
-    {"name":"puppet/collectd","version_requirement":">= 4.0.0"},
-    {"name":"puppetlabs/stdlib","version_requirement":">= 3.2.0"},
-    {"name":"puppetlabs/concat","version_requirement":">= 1.0.4"}
+    {"name":"puppetlabs/stdlib","version_requirement":">= 4.2.0"},
+    {"name":"puppetlabs/concat","version_requirement":">= 1.0.4"},
+    {"name":"puppetlabs/apt","version_requirement":">= 2.2.2"},
+    {"name":"puppetlabs/git","version_requirement":">= 0.4.0"},
+    {"name":"puppetlabs/vcsrepo","version_requirement":">=1.0.2"}
   ]
 }
