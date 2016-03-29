@@ -1,67 +1,70 @@
 # puppet_collectd
 
-[![Build Status](https://travis-ci.org/signalfx/puppet_collectd.svg?branch=travis_tests)](https://travis-ci.org/signalfx/puppet_collectd)
+[![Build Status](https://travis-ci.org/signalfx/puppet_install_collectd.svg?branch=master)](https://travis-ci.org/signalfx/puppet_install_collectd)
 
 #### Table of Contents
 
 1. [Overview](#overview)
-2. [Module Description - What the module does and why it is useful](#module-description)
-3. [Setup - The basics of getting started with collectd](#setup)
+2. [Setup - The basics of getting started with collectd](#setup)
     * [What collectd affects](#what-collectd-affects)
-4. [Usage - Configuration options and additional functionality](#usage)
-5. [Limitations - OS compatibility, etc.](#limitations)
+3. [Usage - Configuration options and additional functionality](#usage)
+4. [Limitations - OS compatibility, etc.](#limitations)
 
 ## Overview
 
-The collectd module installs the latest build of collectd from [SignalFx](http://signalfx.com) and keeps it up-to-date.
+This Puppet module installs and configures the collectd from [SignalFx](http://signalfx.com), it also configures your collectd to send metrics to SignalFx.
 
-This is one of three modules provided by SignalFx for managing collectd. See [Module Description](#module-description). 
-
-Module name | Description
-------------| ------------
-puppet_collectd | Install and stay up-to-date with SignalFx's latest build of collectd.
-[configure_collectd_plugins](https://forge.puppetlabs.com/signalfx/configure_collectd_plugins) | Enable and configure a set of collectd plugins that work well with SignalFx.
-[send_collectd_metrics](https://forge.puppetlabs.com/signalfx/send_collectd_metrics) | Configure collectd to send metrics to SignalFx.
+With this module, you can also configure collectd plugins like collectd-rabbitmq, collectd-elasticsearch, collectd-redis etc to send metrics to SignalFx.
 
 ## Setup
-Install the latest release of collectd module from SignalFx using:
 ```shell
-puppet module install signalfx/collectd
+puppet module install signalfx/collectd (not released on PuppetForge yet!)
 ```
 
 ### What collectd affects
 
-The collectd module only installs SignalFx's latest build of collectd on your system. SignalFx provides additional modules to configure collectd plugins and send metrics to SignalFx. See [Module Description](#module-description).
+This module installs and configures collectd on your system to send various metrics to SignalFx. Be careful if you already have a collectd working. It will replace your existing collectd configuration.
 
 ## Usage
 
-Install_collectd module accepts various parameters:
-
-**1. ensure**
-Default value of ensure is present. There are three supported cases:  
-  1.1. If your system does not have any existing collectd, the default value, 'present' allows the module to install the latest collectd packages from SignalFx repositories.  
-  1.2. If you want to install only a specific version of collectd, you can set 'version' as this parameter's value. For example, set ensure as '5.5.0-sfx3~trusty' to get the exact specified version.  
-  1.3. If your system already has collectd, you have to change this value to 'latest' to get the newest version. (Remember to change this value back to present once you have updated all your nodes, else, puppet will be automatically updating your collectd version as new packages are released by SignalFx)  
-
-**2. ppa**  
-This optional variable applies to Ubuntu systems. It allows the module to use your local repository(cloned from SignalFx) for collectd packages. Default value is appropriate up-to-date ppa hosted by SignalFx.
-
 ```shell
-class { 'collectd':
-  ensure       => "present",
-  ppa          => 'ppa:signalfx/collectd-release',
-  debian_ppa   => "deb https://dl.signalfx.com/debs/collectd/jessie/release /",
-  purge        => undef,
-  recurse      => undef,
-  purge_config => false
+class { 'collectd' :
+    signalfx_api_token  => 'YOUR_SIGNALFX_API_TOKEN'
 }
 ```
 
-**3. debian_ppa**
-This optional variable applies to Debian GNU/Linux 7 and 8. It allows the module to use your local repository(cloned from SignalFx) for collectd packages. Default value is appropriate up-to-date ppa hosted by SignalFx.
+Other valid parameters are (check the params.pp file for default values):
 
-**4. others**
-Set purge, recurse and purge_config to true to delete your existing collectd folders in case 1.3 and install just the latest version of collectd. The default values for purge, recurse and purge_config are undef, undef and false respectively.
+Parameter | Description
+----------|------------
+signalfx_api_token | Your SignalFx API Token
+dimension_list | Set custom dimensions on all of the metrics that collectd sends to SignalFx. For example, you can use a custom dimension to indicate that one of your servers is running Kafka by including it in the hash map as follows: dimension_list => {"serverType" => "kafka"}
+aws_integration | Controls AWS metadata syncing to SignalFx. Default is true.
+signalfx_api_endpoint | The API endpoint to post your metrics. This will be useful if you are using a proxy.
+ensure_signalfx_collectd_version | Ensures the collectd version on the system. Accepted values are of `ensure` from Puppet.
+signalfx_collectd_repo_source | The source of the collectd repository from SignalFx. This will be useful when you mirror a SignalFx repository. Valid on Ubuntu and Debian systems.
+signalfx_plugin_repo_source  | The source of the signalfx-collectd-plugin repository from SignalFx. This will be useful when you mirror a SignalFx repository. Valid on Ubuntu and Debian systems.
+fqdnlookup | Fqdnlookup of the collectd.conf file
+hostname | Hostname to be used if fqdnlookup is true, default value would be the hostname from Puppet Facter.
+interval | Interval of the collectd.conf file
+timeout | Timeout of the collectd.conf file
+read_threads | ReadThreads of the collectd.conf file
+write_queue_limit_high | WriteQueueLimitHigh of the collectd.conf file
+write_queue_limit_low | WriteQueueLimitLow of the collectd.conf file
+collect_internal_stats | CollectInternalStats of the collectd.conf file
+flush_interval | FlushInterval of the collectd.conf file
+flush_timeout | FlushTimeout of the collectd.conf file
+log_file | The location of log file to be used by collectd
+write_http_timeout | Timeout option of write_http plugin
+write_http_buffersize | BufferSize option of write_http plugin
+write_http_flush_interval | FlushInterval option of write_http plugin
+write_http_log_http_error | LogHttpError option of write_http plugin
+ensure_signalfx_plugin_version | Ensures the signalfx-collectd-plugin version on the system. Accepted values are of `ensure` from Puppet.
+signalfx_plugin_log_traces | LogTraces of signalfx-collectd-plugin
+signalfx_plugin_interactive | Interactive option of signalfx-collectd-plugin
+signalfx_plugin_notifications | Notifications option of signalfx-collectd-plugin
+signalfx_plugin_notify_level | NotifyLevel option of signalfx-collectd-plugin
+signalfx_plugin_dpm | DPM option of signalfx-collectd-plugin
 
 ## Limitations
 
