@@ -66,6 +66,88 @@ signalfx_plugin_notifications | Notifications option of signalfx-collectd-plugin
 signalfx_plugin_notify_level | NotifyLevel option of signalfx-collectd-plugin
 signalfx_plugin_dpm | DPM option of signalfx-collectd-plugin
 
+You can also install and configure different collectd plugins
+
+### Apache
+```shell
+class { 'configure_collectd_plugins::plugins::apache':
+  instanceName  => 'myapacheinstance',
+  url           => 'http://localhost/mod_status?auto'
+}
+```
+
+Parameter | Description
+----------|------------
+instanceName | Appears as the dimension `plugin_instance` in SignalFx. 
+url | The URL at which the plugin can read the output of Apache's mod_status module.
+
+### MySQL
+```shell
+class { 'configure_collectd_plugins::plugins::mysql':
+  hostname,
+  user,
+  password,
+  database
+}
+```
+
+Parameter | Description
+----------|------------
+hostname | Name of the host on which MySQL is running.
+user | Username that collectd can use to connect to MySQL.
+password | Password that collectd can use to connect to MySQL.
+database | Name of the MySQL database to monitor. 
+
+
+### Elasticsearch
+```shell
+class { 'configure_collectd_plugins::plugins::elasticsearch':
+  clustername           => 'elasticsearch',
+  indexes               => '_all',
+  enable_index_stats    => true,
+  enable_cluster_health => true
+}
+```
+
+Parameter | Description
+----------|------------
+clustername | Appears as the dimension `plugin_instance` in SignalFx. 
+indexes | Indexes to monitor using this plugin. All indexes are monitored by default.
+enable_index_stats | Enable or disable index statistic collection
+enable_cluster_health | Enable/disable index and cluster health stats.
+
+### RabbitMQ
+```shell
+class { 'collectd::plugins::rabbitmq' :
+      $username,
+      $password,
+      $host,
+      $port,
+      $collect_channels     = true,
+      $collect_connections  = true,
+      $collect_exchanges    = true,
+      $collect_nodes        = true,
+      $collect_queues       = true,
+      $http_timeout         = 'UNSET',
+      $verbosity_level      = 'UNSET'
+    }
+```
+
+Parameter | Description
+----------|------------
+username | Username that collectd can use to connect to RabbitMQ Management API.
+password | Password that collectd can use to connect to RabbitMQ Management API.
+host | host that collectd can use to connect to RabbitMQ Management API.
+port | port that collectd can use to connect to RabbitMQ Management API.
+collect_channels | 
+collect_connections |
+collect_exchanges |
+collect_nodes |
+collect_queues |
+http_timeout | set a timeout value (in seconds) for connecting to the RabbitMQ Management API
+verbosity_level | controls the quantity of RabbitMQ metrics collected. 
+
+
 ## Limitations
 
 Currently, the supported operating systems are 
