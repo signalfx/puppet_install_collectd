@@ -6,11 +6,9 @@ class collectd::params {
         $interval               = 10
         $timeout                = 2
         $read_threads           = 5
-        $write_queue_limit_high = 2000000
-        $write_queue_limit_low  = 1800000
+        $write_queue_limit_high = 500000
+        $write_queue_limit_low  = 400000
         $collect_internal_stats = true
-        $flush_interval         = 10
-        $flush_timeout          = 2
         $log_file               = '/var/log/signalfx-collectd.log'
         
         $ensure_signalfx_plugin_version = present

@@ -52,8 +52,6 @@ read_threads | ReadThreads of the collectd.conf file
 write_queue_limit_high | WriteQueueLimitHigh of the collectd.conf file
 write_queue_limit_low | WriteQueueLimitLow of the collectd.conf file
 collect_internal_stats | CollectInternalStats of the collectd.conf file
-flush_interval | FlushInterval of the collectd.conf file
-flush_timeout | FlushTimeout of the collectd.conf file
 log_file | The location of log file to be used by collectd
 write_http_timeout | Timeout option of write_http plugin
 write_http_buffersize | BufferSize option of write_http plugin

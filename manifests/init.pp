@@ -14,8 +14,6 @@ class collectd (
     $write_queue_limit_high            = $collectd::params::write_queue_limit_high,
     $write_queue_limit_low             = $collectd::params::write_queue_limit_low,
     $collect_internal_stats            = $collectd::params::collect_internal_stats,
-    $flush_interval                    = $collectd::params::flush_interval,
-    $flush_timeout                     = $collectd::params::flush_timeout,
     $log_file                          = $collectd::params::log_file,
     $dimension_list                    = $collectd::params::dimension_list,
     $signalfx_api_endpoint             = $collectd::params::signalfx_api_endpoint,
