@@ -9,11 +9,11 @@ define collectd::plugins::plugin_common (
   
   include collectd
   if $::osfamily == 'RedHat' and $package_name != 'UNSET'and !defined(Package[$package_name]) {
-	  package { $package_name:
-		  ensure  => present,
-		  before  => File["load ${plugin_file_name} plugin"],
-		  require => Exec['install signalfx collectd rpm repo']
-		}
+    package { $package_name:
+      ensure  => present,
+      before  => File["load ${plugin_file_name} plugin"],
+      require => Collectd::Config['collectd']
+    }
   }
   
   file { "load ${plugin_file_name} plugin":
@@ -24,6 +24,6 @@ define collectd::plugins::plugin_common (
     mode    => '0640',
     content => template("collectd/plugins/${plugin_template_name}"),
     notify  => Service['collectd'],
-    require => File[$collectd::plugin_config_dir]
+    require => Collectd::Config['collectd']
   }
 }

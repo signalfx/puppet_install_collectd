@@ -9,12 +9,14 @@ class collectd::plugins::mysql (
 )  {
   
   if $socket == 'UNSET' {
-	  if $::osfamily == 'Debian' {
-	    $socket = '/var/lib/mysqld/mysqld.sock'
-	  }
-	  elsif $::osfamily == 'Redhat' {
-	    $socket = '/var/lib/mysql/mysql.sock'
-	  }
+    if $::osfamily == 'Debian' {
+      $socket_file = '/var/lib/mysqld/mysqld.sock'
+    }
+    elsif $::osfamily == 'Redhat' {
+      $socket_file = '/var/lib/mysql/mysql.sock'
+    }
+  }else {
+    $socket_file = $socket
   }
 
   collectd::plugins::plugin_common { 'mysql':

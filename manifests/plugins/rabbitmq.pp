@@ -10,16 +10,16 @@ class collectd::plugins::rabbitmq (
   $collect_exchanges    = true,
   $collect_nodes        = true,
   $collect_queues       = true,
-  $http_timeout         = 'UNSET',
-  $verbosity_level      = 'UNSET',
+  $http_timeout         = 60,
+  $verbosity_level      = 'info',
   $field_length         = 1024,
 ) {
   
   file { '/opt/collectd-rabbitmq':
     ensure => directory,
     mode   => '0750',
-	  owner  => 'root',
-	  group  => 'root',
+    owner  => 'root',
+    group  => 'root',
   } ->
   file { 'rabbitmq.py':
     ensure  => present,

@@ -45,16 +45,8 @@ LoadPlugin python
     CollectExchanges <%= @collect_exchanges %>
     CollectNodes <%= @collect_nodes %>
     CollectQueues <%= @collect_queues %>
-    <% if @http_timeout == 'UNSET' %>
-    # HTTPTimeout 60
-    <% else %>
     HTTPTimeout <%= @http_timeout %>
-    <% end %>
-    <% if @verbosity_level == 'UNSET' %>
-    # VerbosityLevel "info"
-    <% else %>
     VerbosityLevel <%= @verbosity_level %>
     FieldLength <%= @field_length %>
-    <% end %>
   </Module>
 </Plugin>

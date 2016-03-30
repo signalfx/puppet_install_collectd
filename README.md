@@ -12,7 +12,7 @@
 
 ## Overview
 
-This Puppet module installs and configures the collectd from [SignalFx](http://signalfx.com), it also configures your collectd to send metrics to SignalFx.
+This Puppet module installs and configures the collectd from [SignalFx](http://signalfx.com), it also configures the installed collectd to send metrics to SignalFx.
 
 With this module, you can also configure collectd plugins like collectd-rabbitmq, collectd-elasticsearch, collectd-redis etc to send metrics to SignalFx.
 
@@ -23,7 +23,7 @@ puppet module install signalfx/collectd (not released on PuppetForge yet!)
 
 ### What collectd affects
 
-This module installs and configures collectd on your system to send various metrics to SignalFx. Be careful if you already have a collectd working. It will replace your existing collectd configuration.
+This module installs and configures collectd on your system to send various metrics to SignalFx. Be careful if you already have a working collectd. It will replace your existing collectd configuration.
 
 ## Usage
 
@@ -85,7 +85,8 @@ class { 'configure_collectd_plugins::plugins::mysql':
   hostname,
   user,
   password,
-  database
+  database,
+  socket => 'UNSET'
 }
 ```
 
@@ -95,7 +96,7 @@ hostname | Name of the host on which MySQL is running.
 user | Username that collectd can use to connect to MySQL.
 password | Password that collectd can use to connect to MySQL.
 database | Name of the MySQL database to monitor. 
-
+socket | Name of the socket file to use. If 'UNSET', a valid default value is used.
 
 ### Elasticsearch
 ```shell
@@ -117,19 +118,19 @@ enable_cluster_health | Enable/disable index and cluster health stats.
 ### RabbitMQ
 ```shell
 class { 'collectd::plugins::rabbitmq' :
-      username,
-      password,
-      host,
-      port,
-      collect_channels     = true,
-      collect_connections  = true,
-      collect_exchanges    = true,
-      collect_nodes        = true,
-      collect_queues       = true,
-      http_timeout         = 'UNSET',
-      verbosity_level      = 'UNSET',
-      field_length         = 1024
-    }
+  username,
+  password,
+  host,
+  port,
+  collect_channels     = true,
+  collect_connections  = true,
+  collect_exchanges    = true,
+  collect_nodes        = true,
+  collect_queues       = true,
+  http_timeout         = 60,
+  verbosity_level      = 'info',
+  field_length         = 1024
+}
 ```
 
 Parameter | Description
@@ -143,9 +144,21 @@ collect_connections | Enables collection of connection statistics
 collect_exchanges | Enables collection of exchange statistics
 collect_nodes | Enables collection of node statistics
 collect_queues | Enables collection of queue statistics
-http_timeout | Integer value in seconds before timing out when connecting to the RabbitMQ Management API. Default is 60.
-verbosity_level | Controls the quantity of RabbitMQ metrics collected. see [plugin file](https://github.com/signalfx/puppet_install_collectd/blob/master/templates/plugins/rabbitmq/rabbitmq.conf.erb) for more details. If unspecified, 'info' will be used.
+http_timeout | Integer value in seconds before timing out when connecting to the RabbitMQ Management API.
+verbosity_level | Controls the quantity of RabbitMQ metrics collected. see [plugin file](https://github.com/signalfx/puppet_install_collectd/blob/master/templates/plugins/rabbitmq/rabbitmq.conf.erb) for more details.
 field_length | The number of characters used to encode dimension data. Default is 1024.
+
+
+### Cassandra
+```shell
+class { 'configure_collectd_plugins::plugins::cassandra':
+  hostname => $::hostname
+}
+```
+
+Parameter | Description
+----------|------------
+hostname | The name of the host running Cassandra.
 
 
 

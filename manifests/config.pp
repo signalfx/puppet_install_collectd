@@ -27,8 +27,8 @@ define collectd::config {
       notify  => Service['collectd'],
   } ->
   file { $aggregation_config_file :
-      content  => template('collectd/aggregation-cpu.conf.erb'),
-      notify   => Service['collectd']
+      content => template('collectd/aggregation-cpu.conf.erb'),
+      notify  => Service['collectd']
   } ->
   file { $filtering_config_file:
       content => template('collectd/filtering.conf.erb'),

@@ -21,18 +21,20 @@ class collectd::params {
         $write_http_flush_interval = 10
         
         $signalfx_plugin_log_traces        = true
-		    $signalfx_plugin_interactive       = false
-		    $signalfx_plugin_notifications     = true
-		    $signalfx_plugin_notify_level      = 'OKAY'
-		    $signalfx_plugin_dpm               = false
+        $signalfx_plugin_interactive       = false
+        $signalfx_plugin_notifications     = true
+        $signalfx_plugin_notify_level      = 'OKAY'
+        $signalfx_plugin_dpm               = false
         
-        # Do not change 'plugin_config_dir', it is here for code reuse
+        # Do not change 'plugin_config_dir' and 'collectd_config_file', it is here for code reuse
         if $::osfamily == 'Debian' {
-			    $plugin_config_dir = '/etc/collectd/managed_config'
-			  }
-			  elsif $::osfamily == 'Redhat' {
-			    $plugin_config_dir = '/etc/collectd.d/managed_config'
-			  }
+          $plugin_config_dir    = '/etc/collectd/managed_config'
+          $collectd_config_file = '/etc/collectd/collectd.conf'
+        }
+        elsif $::osfamily == 'Redhat' {
+          $plugin_config_dir    = '/etc/collectd.d/managed_config'
+          $collectd_config_file = '/etc/collectd.conf'
+        }
         
         case $::operatingsystem {
                 'Ubuntu':{

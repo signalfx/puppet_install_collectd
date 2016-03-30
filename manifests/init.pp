@@ -33,13 +33,13 @@ class collectd (
   
   Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
   # Be careful of dependencies here ( -> )
-  collectd::check_os_compatibility { $title: 
+  collectd::check_os_compatibility { $title:
   } ->
   collectd::get_signalfx_repository { $title :
   } ->
   collectd::install { $title :
   } ->
-  collectd::config { $title : 
+  collectd::config { $title :
   } ->
   collectd::send_metrics { $title :
   }
