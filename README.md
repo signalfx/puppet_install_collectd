@@ -63,6 +63,7 @@ signalfx_plugin_interactive | Interactive option of signalfx-collectd-plugin
 signalfx_plugin_notifications | Notifications option of signalfx-collectd-plugin
 signalfx_plugin_notify_level | NotifyLevel option of signalfx-collectd-plugin
 signalfx_plugin_dpm | DPM option of signalfx-collectd-plugin
+signalfx_plugin_utilization | Utilization option of signalfx-collectd-plugin
 
 You can also install and configure different collectd plugins
 

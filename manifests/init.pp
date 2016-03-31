@@ -28,7 +28,8 @@ class collectd (
     $signalfx_plugin_interactive       = $collectd::params::signalfx_plugin_interactive,
     $signalfx_plugin_notifications     = $collectd::params::signalfx_plugin_notifications,
     $signalfx_plugin_notify_level      = $collectd::params::signalfx_plugin_notify_level,
-    $signalfx_plugin_dpm               = $collectd::params::signalfx_plugin_dpm
+    $signalfx_plugin_dpm               = $collectd::params::signalfx_plugin_dpm,
+    $signalfx_plugin_utilization       = $collectd::params::signalfx_plugin_utilization
 )  inherits collectd::params {
   
   Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }

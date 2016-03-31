@@ -25,6 +25,7 @@ class collectd::params {
         $signalfx_plugin_notifications     = true
         $signalfx_plugin_notify_level      = 'OKAY'
         $signalfx_plugin_dpm               = false
+        $signalfx_plugin_utilization       = true
         
         # Do not change 'plugin_config_dir' and 'collectd_config_file', it is here for code reuse
         if $::osfamily == 'Debian' {
