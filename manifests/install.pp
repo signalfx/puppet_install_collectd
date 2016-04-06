@@ -2,13 +2,12 @@
 #
 class collectd::install {
     if $::osfamily == 'Debian' {
-      package { ['collectd-core', 'collectd', 'signalfx-collectd-plugin']:
+      package { ['collectd-core', 'collectd']:
           ensure  => $collectd::ensure_signalfx_collectd_version,
       }
     }
     if $::osfamily == 'Redhat' {
-      # collectd-python is required for signalfx-collectd-plugin
-      package { ['collectd', 'collectd-disk', 'collectd-write_http', 'signalfx-collectd-plugin', 'collectd-python']:
+      package { ['collectd', 'collectd-disk']:
         ensure   => $collectd::ensure_signalfx_collectd_version,
         provider => 'yum'
       }

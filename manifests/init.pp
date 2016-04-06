@@ -21,9 +21,9 @@ class collectd (
     $write_http_buffersize             = $collectd::params::write_http_buffersize,
     $write_http_flush_interval         = $collectd::params::write_http_flush_interval,
     $write_http_log_http_error         = $collectd::params::write_http_log_http_error,
+    $aws_integration                   = $collectd::params::aws_integration,
     $ensure_signalfx_plugin_version    = $collectd::params::ensure_signalfx_plugin_version,
     $signalfx_plugin_repo_source       = $collectd::params::signalfx_plugin_repo_source,
-    $aws_integration                   = $collectd::params::aws_integration,
     $signalfx_plugin_log_traces        = $collectd::params::signalfx_plugin_log_traces,
     $signalfx_plugin_interactive       = $collectd::params::signalfx_plugin_interactive,
     $signalfx_plugin_notifications     = $collectd::params::signalfx_plugin_notifications,
@@ -31,20 +31,18 @@ class collectd (
     $signalfx_plugin_dpm               = $collectd::params::signalfx_plugin_dpm
 )  inherits collectd::params {
   
+  # Be careful of dependencies in this file ( -> )
   Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
-  # Be careful of dependencies here ( -> )
-  collectd::check_os_compatibility { $title:
-  } ->
-  collectd::get_signalfx_repository { $title :
-  } ->
-  collectd::install { $title :
-  } ->
-  collectd::config { $title :
-  } ->
-  collectd::send_metrics { $title :
-  }
-  service { 'collectd':
-      ensure  => running,
-      require => Package['collectd']
-  }
+  collectd::check_os_compatibility { $title: }
+  
+  anchor { 'collectd::begin': } ->
+	  class { '::collectd::get_signalfx_repository': } ->
+	  class { '::collectd::install': } ->
+	  class { '::collectd::config': } ->
+	  class { '::collectd::create_plugin_dirs': } ~>
+	  class { '::collectd::service': }
+  anchor { 'collectd::end': }
+  
+  class { 'collectd::plugins::write_http': }
+  class { '::collectd::plugins::signalfx': }
 }

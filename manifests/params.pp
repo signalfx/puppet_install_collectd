@@ -26,16 +26,22 @@ class collectd::params {
         $signalfx_plugin_notify_level      = 'OKAY'
         $signalfx_plugin_dpm               = false
         
-        # Do not change 'plugin_config_dir' and 'collectd_config_file', it is here for code reuse
+        # Do not change these values, they are here for code reuse
         if $::osfamily == 'Debian' {
-          $plugin_config_dir    = '/etc/collectd/managed_config'
-          $collectd_config_file = '/etc/collectd/collectd.conf'
           $update_system = 'apt-get update'
+          $plugin_config_dir_tree      = ['/etc/collectd/', '/etc/collectd/managed_config', '/etc/collectd/filtering_config']
+          $include_plugin_dirs         = ['/etc/collectd/managed_config', '/etc/collectd/filtering_config']
+          $plugin_config_dir           = '/etc/collectd/managed_config'
+          $collectd_config_file        = '/etc/collectd/collectd.conf'
+		      $filtering_config_file       = '/etc/collectd/filtering_config/filtering.conf'
         }
         elsif $::osfamily == 'Redhat' {
-          $plugin_config_dir    = '/etc/collectd.d/managed_config'
-          $collectd_config_file = '/etc/collectd.conf'
           $update_system = 'yum update'
+          $plugin_config_dir_tree     = ['/etc/collectd.d/', '/etc/collectd.d/managed_config', '/etc/collectd.d/filtering_config']
+		      $include_plugin_dirs        = ['/etc/collectd.d/managed_config', '/etc/collectd.d/filtering_config']
+		      $plugin_config_dir          = '/etc/collectd.d/managed_config'
+		      $collectd_config_file       = '/etc/collectd.conf'
+		      $filtering_config_file      = '/etc/collectd.d/filtering_config/filtering.conf'
         }
         
         case $::operatingsystem {
@@ -62,6 +68,8 @@ class collectd::params {
                     }
                 }
                 'CentOS': {
+                    $signalfx_collectd_repo_filename = 'SignalFx-collectd-RPMs-centos-release' # file created in /etc/yum.repos.d
+                    $signalfx_plugin_repo_filename = 'SignalFx-collectd_plugin-RPMs-centos-release' # file created in /etc/yum.repos.d
                     case $::operatingsystemmajrelease {
                         '7': {
                             $old_signalfx_collectd_repo_source   = 'SignalFx-collectd-RPMs-centos-7-release'
@@ -79,6 +87,8 @@ class collectd::params {
                     }
                 }
                 'Amazon': {
+                        $signalfx_collectd_repo_filename = 'SignalFx-collectd-RPMs-AWS_EC2_Linux-release' # file created in /etc/yum.repos.d
+                        $signalfx_plugin_repo_filename = 'SignalFx-collectd_plugin-RPMs-AWS_EC2_Linux-release' # file created in /etc/yum.repos.d
                         case $::operatingsystemrelease {
                             '2015.09': {
                                 $old_signalfx_collectd_repo_source   = 'SignalFx-collectd-RPMs-AWS_EC2_Linux_2015_09-release'
