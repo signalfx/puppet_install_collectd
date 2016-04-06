@@ -5,9 +5,7 @@ define collectd::get_signalfx_repository {
       # Be careful of dependencies here ( -> )
       if $::operatingsystem == 'Ubuntu' {
           include apt
-          package { 'apt-transport-https':
-              ensure => present
-          } ->
+          collectd::check_and_install_package { 'apt-transport-https': } ->
           apt::key { 'SignalFx public key id for collectd':
               id     => $collectd::params::signalfx_public_keyid
           } ->

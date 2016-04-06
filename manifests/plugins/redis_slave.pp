@@ -6,6 +6,12 @@ class collectd::plugins::redis_slave (
   $auth    = 'UNSET',
   $verbose = false
 ) {
+  Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
+  # Be careful of dependencies here ( -> )
+  collectd::check_os_compatibility { $title:
+  }
+  
+  
   if !defined( File['/opt/redis-collectd-plugin/redis_info.py'] ) {
     file { '/opt/redis-collectd-plugin/':
       ensure => directory

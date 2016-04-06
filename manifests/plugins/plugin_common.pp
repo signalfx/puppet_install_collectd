@@ -8,11 +8,10 @@ define collectd::plugins::plugin_common (
 ){
   
   include collectd
-  if $::osfamily == 'RedHat' and $package_name != 'UNSET'and !defined(Package[$package_name]) {
-    package { $package_name:
-      ensure  => present,
+  if $::osfamily == 'RedHat' and $package_name != 'UNSET' {
+    collectd::check_and_install_package { $package_name:
       before  => File["load ${plugin_file_name} plugin"],
-      require => Collectd::Config['collectd']
+      require => Collectd::Get_signalfx_repository['collectd']
     }
   }
   

@@ -30,10 +30,12 @@ class collectd::params {
         if $::osfamily == 'Debian' {
           $plugin_config_dir    = '/etc/collectd/managed_config'
           $collectd_config_file = '/etc/collectd/collectd.conf'
+          $update_system = 'apt-get update'
         }
         elsif $::osfamily == 'Redhat' {
           $plugin_config_dir    = '/etc/collectd.d/managed_config'
           $collectd_config_file = '/etc/collectd.conf'
+          $update_system = 'yum update'
         }
         
         case $::operatingsystem {

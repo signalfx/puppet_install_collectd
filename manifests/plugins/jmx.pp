@@ -1,8 +1,13 @@
 # jmx plugin
 #
 class collectd::plugins::jmx {
-  
   include collectd
+  
+  Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
+  # Be careful of dependencies here ( -> )
+  collectd::check_os_compatibility { $title:
+  }
+  
   $typesdbfile = "${collectd::params::plugin_config_dir}/signalfx_types_db"
   
   file_line { 'Ensure collectd typesdb':

@@ -3,6 +3,12 @@
 class collectd::plugins::cassandra (
   $hostname = $::hostname
 ) {
+  
+  Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
+  # Be careful of dependencies here ( -> )
+  collectd::check_os_compatibility { $title:
+  }
+  
   include collectd::plugins::jmx
   collectd::plugins::plugin_common { 'cassandra':
     plugin_file_name     => '20-cassandra.conf',

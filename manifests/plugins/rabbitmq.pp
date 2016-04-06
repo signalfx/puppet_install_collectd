@@ -14,26 +14,23 @@ class collectd::plugins::rabbitmq (
   $verbosity_level      = 'info',
   $field_length         = 1024,
 ) {
+  Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
+  # Be careful of dependencies here ( -> )
+  collectd::check_os_compatibility { $title:
+  }
   
-  file { '/opt/collectd-rabbitmq':
-    ensure => directory,
-    mode   => '0750',
-    owner  => 'root',
-    group  => 'root',
-  } ->
-  file { 'rabbitmq.py':
-    ensure  => present,
-    path    => '/opt/collectd-rabbitmq/rabbitmq.py',
-    owner   => 'root',
-    group   => 'root',
-    content => template('collectd/plugins/rabbitmq/rabbitmq.py.erb')
-  } ->
-  file { 'metric_info.py':
-    ensure  => present,
-    path    => '/opt/collectd-rabbitmq/metric_info.py',
-    owner   => 'root',
-    group   => 'root',
-    content => template('collectd/plugins/rabbitmq/metric_info.py.erb')
+  if(!defined(Class['git'])){
+    exec { 'update system':
+      command => "${collectd::update_system}",
+      unless  => 'test git'
+    } ->
+    class {'git':}
+  }
+  
+  vcsrepo { '/opt/collectd-rabbitmq':
+    ensure   => present,
+    provider => git,
+    source   => 'https://github.com/signalfx/collectd-rabbitmq',
   } ->
   collectd::plugins::plugin_common { 'rabbitmq':
     package_name         => 'collectd-python',

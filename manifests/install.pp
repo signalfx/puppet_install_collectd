@@ -1,6 +1,6 @@
 # Install collectd, signalfx-collectd-plugin and other important packages
 #
-define collectd::install {
+class collectd::install {
     if $::osfamily == 'Debian' {
       package { ['collectd-core', 'collectd', 'signalfx-collectd-plugin']:
           ensure  => $collectd::ensure_signalfx_collectd_version,

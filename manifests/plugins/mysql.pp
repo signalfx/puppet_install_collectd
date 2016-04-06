@@ -7,6 +7,10 @@ class collectd::plugins::mysql (
   $database,
   $socket = 'UNSET'
 )  {
+  Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
+  # Be careful of dependencies here ( -> )
+  collectd::check_os_compatibility { $title:
+  }
   
   if $socket == 'UNSET' {
     if $::osfamily == 'Debian' {
