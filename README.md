@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/signalfx/puppet_install_collectd.svg?branch=travis_tests)](https://travis-ci.org/signalfx/puppet_install_collectd)
 
-This module has been deprecated! Find a new and up-to-date module at https://forge.puppet.com/signalfx/collectd
+## This module has been deprecated! Find a new and up-to-date module at https://forge.puppet.com/signalfx/collectd
 
 #### Table of Contents
 
